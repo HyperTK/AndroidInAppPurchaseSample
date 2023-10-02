@@ -1,11 +1,14 @@
 package com.example.androidinapppurchasesample
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.List
 import androidx.compose.material.icons.outlined.Map
 import androidx.compose.material.icons.outlined.Money
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,6 +35,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.androidinapppurchasesample.ui.theme.AndroidInAppPurchaseSampleTheme
+import com.example.androidinapppurchasesample.ui.view.ConversationScreen
 import com.example.androidinapppurchasesample.ui.view.MapScreen
 import com.example.androidinapppurchasesample.ui.view.ProfileScreen
 import com.example.androidinapppurchasesample.ui.view.PurchaseScreen
@@ -44,6 +48,7 @@ enum class MainScreen(@StringRes val title: Int) {
 sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon: ImageVector) {
     object Profile : Screen("profile", R.string.screen_profile, Icons.Filled.Person)
     object Map : Screen("map", R.string.screen_map, Icons.Outlined.Map)
+    object Conversation : Screen("list", R.string.screen_list, Icons.Outlined.List)
     object Purchase : Screen("purchase", R.string.screen_purchase, Icons.Outlined.Money)
 
 }
@@ -82,6 +87,7 @@ fun MainApp(
     val items = listOf(
         Screen.Profile,
         Screen.Map,
+        Screen.Conversation,
         Screen.Purchase
     )
 
@@ -103,11 +109,15 @@ fun MainApp(
                                 contentDescription = null,
                             )
                         },
-                        label = {
-                            Text(
-                                text = stringResource(screen.resourceId)
-                            )
-                        },
+//                        label = {
+//                            Text(
+//                                text = stringResource(screen.resourceId),
+//                                style = TextStyle(
+//                                    fontSize = 12.sp,
+//                                ),
+//                                maxLines = 1
+//                            )
+//                        },
                         selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                         onClick = {
                             navController.navigate(screen.route) {
@@ -128,14 +138,24 @@ fun MainApp(
             }
         }
     ) { innerPadding ->
-        NavHost(
-            navController,
-            startDestination = Screen.Profile.route
-        ) {
-            composable(Screen.Profile.route) { ProfileScreen(navController, innerPadding) }
-            composable(Screen.Map.route) { MapScreen(navController, innerPadding) }
-            composable(Screen.Purchase.route) { PurchaseScreen(navController, innerPadding) }
-        }
+        ScreenNavigation(navController, innerPadding)
+    }
+}
+
+@Composable
+fun ScreenNavigation(
+    navController: NavHostController,
+    paddingValues: PaddingValues
+) {
+    NavHost(
+        navController,
+        startDestination = Screen.Profile.route,
+        Modifier.padding(paddingValues)
+    ) {
+        composable(Screen.Profile.route) { ProfileScreen(navController, paddingValues) }
+        composable(Screen.Map.route) { MapScreen(navController, paddingValues) }
+        composable(Screen.Conversation.route) { ConversationScreen(messages = SampleData.conversationSample) }
+        composable(Screen.Purchase.route) { PurchaseScreen(navController, paddingValues) }
     }
 }
 

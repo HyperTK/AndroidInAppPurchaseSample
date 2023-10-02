@@ -4,6 +4,7 @@
     <string name="screen_profile">プロフィール</string>
     <string name="screen_map">地図</string>
     <string name="screen_purchase">課金</string>
+    <string name="screen_list">リスト</string>
     <string name="back_button">Back</string>
 
 </resources>
