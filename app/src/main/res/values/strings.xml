@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">AndroidInAppPurchaseSample</string>
+    <string name="app_name">さんぷる</string>
+    <string name="screen_second">せかんど</string>
+    <string name="screen_profile">プロフィール</string>
+    <string name="screen_map">地図</string>
+    <string name="screen_purchase">課金</string>
+    <string name="back_button">Back</string>
+
 </resources>
