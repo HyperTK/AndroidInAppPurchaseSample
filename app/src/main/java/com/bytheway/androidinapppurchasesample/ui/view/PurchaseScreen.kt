@@ -8,6 +8,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
@@ -19,6 +20,8 @@ import com.bytheway.androidinapppurchasesample.ui.compose.Center
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.collect.ImmutableList
 import java.lang.IllegalStateException
 
+lateinit var purchaseHelper: PurchaseHelper
+
 @Composable
 fun PurchaseScreen(navController: NavController, paddingValues: PaddingValues) {
     InPurchase()
@@ -27,23 +30,29 @@ fun PurchaseScreen(navController: NavController, paddingValues: PaddingValues) {
 @Composable
 fun InPurchase() {
     val context = LocalContext.current
+    val activity = context.findActivity()
+    purchaseHelper = PurchaseHelper(activity)
+    val state = purchaseHelper.statusText.collectAsState()
+    val product = purchaseHelper.productName.collectAsState()
+    // 課金セットアップ
+    purchaseHelper.billingSetup()
 
     Center {
-        Button(onClick = { startPurchase(context) }) {
+        Button(onClick = { startPurchase() }) {
             Text(text = "Button")
         }
+        Text(text = "Status:" + state.value)
+        Text(text = "Product:" + product.value)
     }
+
 }
 
 /**
  * 課金処理を開始する
  */
-fun startPurchase(context: Context) {
-    val activity = context.findActivity()
+fun startPurchase() {
 
-    val purchaseHelper = PurchaseHelper(activity)
-    purchaseHelper.billingSetup()
-    //purchaseHelper.makePurchase()
+    purchaseHelper.makePurchase()
 }
 
 /**

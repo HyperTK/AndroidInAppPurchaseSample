@@ -5,6 +5,8 @@ import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
+import com.android.billingclient.api.ConsumeParams
+import com.android.billingclient.api.ConsumeResponseListener
 import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
@@ -14,6 +16,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 data class PurchaseHelper(val activity: Activity) {
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
@@ -130,6 +133,21 @@ data class PurchaseHelper(val activity: Activity) {
             _buyEnabled.value = false
             _consumeEnabled.value = true
             _statusText.value = "Purchase Completed"
+        }
+    }
+
+    fun consumePurchase() {
+        val consumeParams = ConsumeParams.newBuilder()
+            .setPurchaseToken(purchase.purchaseToken)
+            .build()
+        coroutineScope.launch {
+            billingClient.consumeAsync(consumeParams) { billingResult, s ->
+                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                    _statusText.value = "Purchase Consumed"
+                    _buyEnabled.value = true
+                    _consumeEnabled.value = false
+                }
+            }
         }
     }
 }
