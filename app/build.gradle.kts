@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.androidinapppurchasesample"
+    namespace = "com.bytheway.androidinapppurchasesample"
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "com.example.androidinapppurchasesample"
+        applicationId = "com.bytheway.androidinapppurchasesample"
         minSdk = 24
         targetSdk = 33
         versionCode = 1
@@ -51,11 +51,16 @@ android {
 
 dependencies {
 
+    implementation("com.google.firebase:firebase-crashlytics-buildtools:2.9.9")
+    // ナビゲーション関係
     val nav_version = "2.5.3"
-
     implementation("androidx.navigation:navigation-compose:$nav_version")
     implementation("androidx.compose.material:material:1.3.1")
     implementation("androidx.compose.material:material-icons-extended:1.0.0-alpha08")
+    // アプリ内課金関係
+    val billing_version = "6.0.1"
+    implementation("com.android.billingclient:billing:$billing_version")
+
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation("androidx.activity:activity-compose:1.7.2")
