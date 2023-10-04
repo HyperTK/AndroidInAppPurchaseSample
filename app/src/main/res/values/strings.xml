@@ -7,4 +7,7 @@
     <string name="screen_list">リスト</string>
     <string name="back_button">Back</string>
 
+    <string name="button_plan_year">年額プラン</string>
+    <string name="button_plan_monthly">月額プラン</string>
+
 </resources>
