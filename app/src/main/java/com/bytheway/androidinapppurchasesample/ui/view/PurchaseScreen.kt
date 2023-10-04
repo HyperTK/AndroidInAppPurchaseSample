@@ -69,6 +69,7 @@ fun InPurchase() {
 
     Center {
         Text(text = "Status:$statusText")
+        // 消費系アイテムの表示
         consumeItems.forEach { item ->
             ElevatedCard(
                 elevation=CardDefaults.elevatedCardElevation(defaultElevation = 6.dp),
@@ -85,6 +86,7 @@ fun InPurchase() {
                 }
             }
         }
+        // サブスクプランの表示
         subscribeItems.forEach { item ->
             if (item.subscriptionOfferDetails.isNullOrEmpty()) return@forEach
             item.subscriptionOfferDetails!!.forEach { offerDetail ->
